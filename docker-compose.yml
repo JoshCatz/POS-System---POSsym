@@ -1,0 +1,56 @@
+
+services:
+
+  db:
+    image: postgres:17
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: example
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: pos_db
+    ports:
+      - 5432:5432
+  
+  redis:
+    image: redis:7
+    restart: always
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - 6379:6379
+
+  api:
+    build: ./backend
+    restart: always
+    ports:
+      - 8000:8000
+    env_file: .env
+    depends_on:
+      - db
+      - redis
+
+  celery_worker:
+    build: ./backend
+    restart: always
+    command: celery -A app.workers.celery_app worker --loglevel=info
+    env_file : .env
+    depends_on:
+      - db
+      - redis
+
+  celery_beat:
+    build: ./backend
+    restart: always
+    command: celery -A app.workers.celery_app beat --loglevel=info
+    env_file: .env
+    depends_on:
+      - celery_worker
+
+    
+    
+volumes:
+  postgres_data:
+  redis_data:

@@ -1,0 +1,50 @@
+# ── Web Framework ──────────────────────────────────────────
+fastapi==0.115.0          # Core web framework, handles routing and request/response
+uvicorn==0.30.0           # ASGI server that runs FastAPI (like Apache/Nginx for Python)
+
+# ── Database ───────────────────────────────────────────────
+sqlalchemy==2.0.36        # ORM - maps Python classes to PostgreSQL tables
+alembic==1.13.0           # Migration tool - versions and applies schema changes
+asyncpg==0.30.0           # Async PostgreSQL driver - lets FastAPI talk to Postgres
+                          # without blocking (required for SQLAlchemy async mode)
+
+# ── Redis ──────────────────────────────────────────────────
+redis==5.1.0              # Redis client - used for table locking, pub/sub,
+                          # and kitchen ticket delivery
+
+# ── Authentication ─────────────────────────────────────────
+python-jose==3.3.0        # JWT creation and decoding - handles login tokens
+passlib==1.7.4            # Password hashing - never store plain text passwords
+bcrypt==4.0.1             # Hashing algorithm used by passlib
+
+# ── Background Jobs ────────────────────────────────────────
+celery==5.4.0             # Task queue - runs background jobs (AWS sync, payroll)
+celery[redis]==5.4.0      # Redis backend for Celery - lets Celery use Redis
+                          # as its message broker
+
+# ── AWS ────────────────────────────────────────────────────
+boto3==1.35.0             # AWS SDK - used by Celery tasks to sync data
+                          # to S3, RDS, and other AWS services
+
+# ── Validation & Serialization ─────────────────────────────
+pydantic==2.9.0           # Data validation - defines request/response shapes,
+                          # built into FastAPI
+pydantic-settings==2.5.0  # Loads and validates .env variables into a
+                          # typed Python settings object
+
+# ── Payment ────────────────────────────────────────────────
+stripe==10.12.0           # Stripe SDK - creates payment intents and handles
+                          # webhooks from Stripe Terminal
+
+# ── HTTP Client ────────────────────────────────────────────
+httpx==0.27.0             # Async HTTP client - used for any outbound API calls
+                          # and for testing FastAPI endpoints in pytest
+
+# ── Testing ────────────────────────────────────────────────
+pytest==8.3.0             # Test framework - runs all your tests
+pytest-asyncio==0.24.0    # Lets pytest run async test functions
+                          # (needed since FastAPI is async)
+
+# ── Dev Utilities ──────────────────────────────────────────
+python-dotenv==1.0.0      # Loads .env file into environment variables
+                          # during local development
