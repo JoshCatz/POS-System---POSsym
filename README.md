@@ -157,6 +157,7 @@ docker compose exec redis redis-cli
 ```
 
 ### Architecture Overview
+```bash
 [ELO Tablets - React]
         |
     WiFi (isolated VLAN)
@@ -174,3 +175,4 @@ docker compose exec redis redis-cli
                      ├── S3 (storage/backups)
                      ├── ECS/Fargate (services)
                      └── CloudWatch (monitoring)
+```
