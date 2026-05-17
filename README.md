@@ -3,15 +3,24 @@
 A full-stack POS system built for restaurants. Designed to run locally on a Beelink Mini PC per location, with hourly sync to AWS for analytics, payroll, and reporting.
 
 ## Tech Stack 
-Frontend - React -> Tablet POS interface and kitchen monitors
-API - FastAPI + Uvicorn -> REST API and Websocket server
-ORM - SQLAlchemy 2.0 (async) -> Database interactions
-Database - PostreSQL 17 -> Source of truth database
-Cache/Messaging - Redis 7 -> Table locking, kitchen pub/sub, job queue
-Background Jobs - Celery + Celery Beat -> AWS batch sync, payroll, schedueled tasks
-Payments - Stripe Terminal -> Tableside card processing
-Cloud - AWS (RDS, S3, ECS, Lambda) -> Analytics, reporting, backups
-Containers - Docker + Docker Compose -> Local Developement/Deployment
+### Frontend
+- React -> Tablet POS interface and kitchen monitors
+### API 
+- FastAPI + Uvicorn -> REST API and Websocket server
+### ORM 
+- SQLAlchemy 2.0 (async) -> Database interactions
+### Database 
+- PostreSQL 17 -> Source of truth database
+### Cache/Messaging 
+- Redis 7 -> Table locking, kitchen pub/sub, job queue
+### Background Jobs 
+- Celery + Celery Beat -> AWS batch sync, payroll, schedueled tasks
+### Payments 
+- Stripe Terminal -> Tableside card processing
+### Cloud 
+- AWS (RDS, S3, ECS, Lambda) -> Analytics, reporting, backups
+### Containers 
+- Docker + Docker Compose -> Local Developement/Deployment
 
 ## Prerequisites
 Install these before anything else!
