@@ -26,7 +26,7 @@ A full-stack POS system built for restaurants. Designed to run locally on a Beel
 Install these before anything else!
 - Docker Desktop - runs all services
 - Git - version control
-- VS Code - RECOMMENEDED editor (can use personal preference)
+- VS Code - RECOMMENDED editor (can use personal preference)
 
 + You do not need Python, PostgreSQL, or Redis installed locally! Everything runs from in the Docker containers
 
