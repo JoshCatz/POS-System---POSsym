@@ -79,6 +79,7 @@ curl http://localhost:8000/health
 ```
 
 ## Project Structure
+```
 /POS-System---POSsym
   docker-compose.yml          ← starts all services
   .env                        ← your local secrets (never committed)
@@ -104,7 +105,7 @@ curl http://localhost:8000/health
 
   /frontend                   ← React application (coming soon)
   /docs                       ← API contracts, WebSocket event schema
-
+```
 ### Usefule Commands
 ```bash
 # Start everything (first time or after code changes)
