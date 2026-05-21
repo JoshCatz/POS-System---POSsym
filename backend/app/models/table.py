@@ -9,10 +9,10 @@ class Tables(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id")) 
-    table_number: Mapped[int]
+    table_number: Mapped[int] = mapped_column()
     status: Mapped[str] = mapped_column(String(100)) # open, occupied, reserved, closed
     employee_id: Mapped[Optional[int]] = mapped_column(ForeignKey("employees.id"), nullable=True)
-    order_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orders.id"), nullable=True)
+    order_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orders.id", use_alter=True), nullable=True)
 
 class Table_Party(Base):
     __tablename__ = "table_party"
