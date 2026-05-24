@@ -10,6 +10,9 @@ class Employee(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id"))
     name: Mapped[str] = mapped_column(String(255))
+    role: Mapped[str] = mapped_column(String(50))
+    pin: Mapped[str] = mapped_column(String(255))  
+    password: Mapped[str] = mapped_column(String(255))
 
 class Position(Base):
     __tablename__ = "positions"
