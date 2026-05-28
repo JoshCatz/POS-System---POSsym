@@ -11,7 +11,7 @@ EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", 480))
 myctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_password(password:str) -> str:
-   return  myctx.hash(password)
+   return myctx.hash(password)
 
 def verify_password(password:str, hashed:str) -> bool:
    return myctx.verify(password, hashed)
@@ -22,7 +22,7 @@ def create_token(employee_id: int, role: str, restaurant_id: int, auth_type: str
         "role": role,
         "restaurant_id": restaurant_id,
         "auth_type": auth_type,
-        "exp": datetime.utcnow() + timedelta(minutes=EXPIRE_MINUTES)
+        "exp": datetime.now() + timedelta(minutes=EXPIRE_MINUTES)
     }
     return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 

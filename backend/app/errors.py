@@ -36,5 +36,12 @@ class UnauthorizedException(POSException):
             message = "Invalid or missing credentials",
             status_code = 401
         )
+
+class RedundantException(POSException):
+    def __init__(self, redundant:str):
+        super().__init__(
+            message = f"Redundant Error: {redundant}",
+            status_code = 422
+        )
         
 

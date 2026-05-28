@@ -2,11 +2,13 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from app.errors import POSException, TableLockedException
-from app.api import auth
+from app.api import auth, menu
+
 
 app = FastAPI()
 
 app.include_router(auth.router)
+app.include_router(menu.router)
 
 @app.exception_handler(POSException)
 async def pos_exception_handler(request: Request, exc: POSException):
