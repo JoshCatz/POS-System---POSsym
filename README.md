@@ -194,7 +194,7 @@ This will help us stay organized and manage our workflow
 `git pull origin main` pulls the most recent version of the repo to your machine
 
 ##### 2. Create a feature branch for the feature you're working on
-`git checkout -b feature/branch-name` creates/switches too the feature branch. Any commits you make will go to this branch.
+`git checkout -b feature/branch-name` creates/switches to the feature branch. Any commits you make will go to this branch.
 
 ##### 3. Stage you files
 These lines allow you to commit all files or a single file respectively
