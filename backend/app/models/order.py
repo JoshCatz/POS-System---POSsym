@@ -30,13 +30,9 @@ class Order_Item(Base):
     voided_by: Mapped[Optional[int]] = mapped_column(ForeignKey("employees.id"), nullable=True)
     void_reason: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
-class Order_Item_Modifier(Base):
-    __tablename__ = "order_item_modifiers"
+class Table(Base):
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    order_item_id: Mapped[int] = mapped_column(ForeignKey("order_items.id"))
-    modifier_id: Mapped[int] = mapped_column(ForeignKey("modifiers.id"))
-    price: Mapped[Decimal] = mapped_column(Numeric(10,2))
+class Ticket(Base):
 
 
 
