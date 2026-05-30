@@ -4,14 +4,17 @@ from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 from typing import Optional
 
+
 class Employee(Base, TimestampMixin):
     __tablename__ = "employees"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id"))
+    
     name: Mapped[str] = mapped_column(String(255))
     pin_hash: Mapped[str] = mapped_column(String(255))  
     password_hash: Mapped[str] = mapped_column(String(255))
+    
     is_active: Mapped[bool] = mapped_column(default=True)
 
 class Position(Base):
@@ -27,7 +30,10 @@ class EmployeePosition(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     employee_id: Mapped[int] = mapped_column(ForeignKey("employees.id"))
     position_id: Mapped[int] = mapped_column(ForeignKey("positions.id"))
-    UniqueConstraint("employee_id", "position_id")
+    
+    __table_args__ = (
+        UniqueConstraint("employee_id", "position_id")
+    )
 
 class Shift(Base):
     __tablename__ = "shifts"
