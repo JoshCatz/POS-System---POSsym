@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 from typing import Optional
 
-
+# Each individual employee within a restaurant
 class Employee(Base, TimestampMixin):
     __tablename__ = "employees"
 
@@ -17,6 +17,7 @@ class Employee(Base, TimestampMixin):
     
     is_active: Mapped[bool] = mapped_column(default=True)
 
+# Employe's job within the restaurant. i.e. Server, Bartender, Manager, Cook, etc.
 class Position(Base):
     __tablename__ = "positions"
     
@@ -24,6 +25,7 @@ class Position(Base):
     name: Mapped[str] = mapped_column(String(100))
     restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id"))
 
+# Connects employees to their position
 class EmployeePosition(Base):
     __tablename__ = "employee_positions"
 
@@ -35,6 +37,7 @@ class EmployeePosition(Base):
         UniqueConstraint("employee_id", "position_id")
     )
 
+# Shift worked by an employee
 class Shift(Base):
     __tablename__ = "shifts"
 
