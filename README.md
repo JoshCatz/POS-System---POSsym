@@ -196,7 +196,7 @@ This will help us stay organized and manage our workflow
 ##### 2. Create a feature branch for the feature you're working on
 `git checkout -b feature/branch-name` creates/switches to the feature branch. Any commits you make will go to this branch.
 
-##### 3. Stage you files
+##### 3. Stage your files
 These lines allow you to commit all files or a single file respectively
 ```bash
 git add .
