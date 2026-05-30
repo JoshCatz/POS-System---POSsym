@@ -2,6 +2,7 @@ from app.models.base import Base
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 
+# Roles to control access. i.e. employee, manager, admin
 class Role(Base, TimestampMixin):
   __tablename__ = "roles"
 
@@ -13,6 +14,7 @@ __table_args__ = (
   UniqueConstraint("name", name="uq_roles_name"),
 )
 
+# Specific capabilities of each role
 class Permission(Base):
   __tablename = "permissions"
 
@@ -24,6 +26,7 @@ class Permission(Base):
     UniqueConstraint("code", name="uq_permissions_code"),
   )
 
+# Connect roles to their permissions
 class RolePermission(Base):
   __tablename__ = "role_permissions"
 
@@ -35,6 +38,7 @@ class RolePermission(Base):
     UniqueConstraint("role_id", "permission_id", name="uq_role_permissions_role_permission"),
   )
 
+# Connect employees to their roles
 class EmployeeRole(Base):
   __tablename__ = "employee_roles"
 
