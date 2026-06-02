@@ -1,4 +1,4 @@
-from app.models.base import Base
+from app.models.base import Base, TimestampMixin
 from sqlalchemy import ForeignKey, String, Numeric
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
