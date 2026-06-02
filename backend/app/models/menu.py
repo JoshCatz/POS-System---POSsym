@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from decimal import Decimal
 
 # Categories keep menu items organized. i.e. Burgers, Sandwiches, Sides, Drinks, etc.
-class MenuCatgeory(Base):
+class MenuCategory(Base):
   __tablename__ = "menu_categories"
 
   id: Mapped[int] = mapped_column(primary_key=True)
@@ -16,7 +16,7 @@ class MenuCatgeory(Base):
 
 # Specific items to be purchased
 class MenuItem(Base, TimestampMixin):
-  __tablename__ = "manu_items"
+  __tablename__ = "menu_items"
 
   id: Mapped[int] = mapped_column(primary_key=True)
   restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id"), nullable=False)
