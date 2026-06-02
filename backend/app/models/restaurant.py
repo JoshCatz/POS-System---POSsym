@@ -1,8 +1,8 @@
-from app.models.base import Base
-from sqlalchemy import ForeignKey, String
+from app.models.base import Base, TimestampMixin
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
-from typing import Optional
 
+# Restaurant data
 class Restaurant(Base, TimestampMixin):
     __tablename__ = "restaurants"
     
