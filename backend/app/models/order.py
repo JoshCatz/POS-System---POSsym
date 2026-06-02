@@ -2,7 +2,6 @@ from app.models.base import Base, TimestampMixin
 from sqlalchemy import ForeignKey, String, Numeric
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
-from typing import Optional
 from decimal import Decimal
 
 # Whole order as it exist in sales reporting
