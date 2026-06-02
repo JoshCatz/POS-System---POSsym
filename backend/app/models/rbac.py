@@ -1,5 +1,5 @@
 from app.models.base import Base, TimestampMixin
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 # Roles to control access. i.e. employee, manager, admin
@@ -16,9 +16,9 @@ class Role(Base, TimestampMixin):
 
 # Specific capabilities of each role
 class Permission(Base):
-  __tablename = "permissions"
+  __tablename__ = "permissions"
 
-  id = Mapped[int] = mapped_column(primary_key=True)
+  id: Mapped[int] = mapped_column(primary_key=True)
   code: Mapped[str] = mapped_column(String(100), nullable=False)
   description: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
