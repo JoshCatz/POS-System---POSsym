@@ -31,7 +31,7 @@ class Table(Base, TimestampMixin):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id"), nullable=False)
-    employee_id: Mapped[int | None] = mapped_column(ForiegnKey("employees.id"), nullable=True)
+    employee_id: Mapped[int | None] = mapped_column(ForeignKey("employees.id"), nullable=True)
     
     name: Mapped[str] = mapped_column(String(50), nullable=False)
 
