@@ -6,13 +6,13 @@ from sqlalchemy.orm import Mapped, mapped_column
 class Role(Base, TimestampMixin):
   __tablename__ = "roles"
 
-id: Mapped[int] = mapped_column(primary_key=True)
-name: Mapped[str] = mapped_column(String(50), nullable=False)
-description: Mapped[str | None] = mapped_column(String(255), nullable=True)
+  id: Mapped[int] = mapped_column(primary_key=True)
+  name: Mapped[str] = mapped_column(String(50), nullable=False)
+  description: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
-__table_args__ = (
-  UniqueConstraint("name", name="uq_roles_name"),
-)
+  __table_args__ = (
+    UniqueConstraint("name", name="uq_roles_name"),
+  )
 
 # Specific capabilities of each role
 class Permission(Base):
