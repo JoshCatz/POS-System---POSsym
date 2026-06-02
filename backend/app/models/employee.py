@@ -1,5 +1,5 @@
 from app.models.base import Base, TimestampMixin
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 from typing import Optional
@@ -34,7 +34,7 @@ class EmployeePosition(Base, TimestampMixin):
     position_id: Mapped[int] = mapped_column(ForeignKey("positions.id"))
     
     __table_args__ = (
-        UniqueConstraint("employee_id", "position_id")
+        UniqueConstraint("employee_id", "position_id"),
     )
 
 # Shift worked by an employee
