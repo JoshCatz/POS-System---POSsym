@@ -1,4 +1,4 @@
-from app.models.base import Base
+from app.models.base import Base, TimestampMixin
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
@@ -18,7 +18,7 @@ class Employee(Base, TimestampMixin):
     is_active: Mapped[bool] = mapped_column(default=True)
 
 # Employe's job within the restaurant. i.e. Server, Bartender, Manager, Cook, etc.
-class Position(Base):
+class Position(Base, TimestampMixin):
     __tablename__ = "positions"
     
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -26,7 +26,7 @@ class Position(Base):
     restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id"))
 
 # Connects employees to their position
-class EmployeePosition(Base):
+class EmployeePosition(Base, TimestampMixin):
     __tablename__ = "employee_positions"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -38,7 +38,7 @@ class EmployeePosition(Base):
     )
 
 # Shift worked by an employee
-class Shift(Base):
+class Shift(Base, TimestampMixin):
     __tablename__ = "shifts"
 
     id: Mapped[int] = mapped_column(primary_key=True)
