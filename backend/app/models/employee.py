@@ -26,7 +26,7 @@ class Position(Base, TimestampMixin):
     restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id"))
 
 # Connects employees to their position
-class EmployeePosition(Base, TimestampMixin):
+class Employee_Position(Base, TimestampMixin):
     __tablename__ = "employee_positions"
 
     id: Mapped[int] = mapped_column(primary_key=True)
