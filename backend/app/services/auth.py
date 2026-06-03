@@ -1,41 +1,44 @@
-from passlib.context import CryptContext
-from jose import jwt, JWTError
-import os
 from datetime import datetime, timedelta
+
+from jose import jwt, JWTError
+from passlib.context import CryptContext
+
+from app.config import settings
 from app.schemas.auth import TokenData
 from app.errors import UnauthorizedException
 
-SECRET_KEY = os.getenv("JWT_SECRET")
-EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", 480))
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-myctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
+def hash_secret(secret: str) -> str:
+    return pwd_context.hash(secret)
 
-def hash_password(password:str) -> str:
-   return myctx.hash(password)
+def verify_secret(plain_secret: str, hashed_secret: str) -> bool:
+    return pwd_context.verify(plain_secret, hashed_secret)
 
-def verify_password(password:str, hashed:str) -> bool:
-   return myctx.verify(password, hashed)
-
-def create_token(employee_id: int, role: str, restaurant_id: int, auth_type: str) -> str:
+def create_token(employee_id: int, restaurant_id: int, auth_type: str) -> str:
     payload = {
         "employee_id": employee_id,
-        "role": role,
         "restaurant_id": restaurant_id,
         "auth_type": auth_type,
-        "exp": datetime.now() + timedelta(minutes=EXPIRE_MINUTES)
+        "exp": datetime.now() + timedelta(minutes=settings.jwt_expire_minutes)
     }
-    return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+    return jwt.encode(payload, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
 
 def decode_token(token: str) -> TokenData:
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token, settings.jwt_secret_key, algorithms=[settings.jwt_algorithm])
         employee_id = payload.get("employee_id")
         role = payload.get("role")
         restaurant_id = payload.get("restaurant_id")
+
+        if employee_id is None or restaurant_id is None or auth_type is None:
+            raise UnauthorizedException()
+
         return TokenData(
             employee_id=employee_id,
-            role=role,
-            restaurant_id=restaurant_id
+            restaurant_id=restaurant_id,
+            auth_type=auth_type,
         )
+
     except JWTError:
         raise UnauthorizedException()
