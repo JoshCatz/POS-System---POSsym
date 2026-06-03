@@ -5,7 +5,7 @@ from app.errors import POSException, TableLockedException
 from app.api import auth, menu
 
 
-app = FastAPI()
+app = FastAPI(title="POS System API", version="1.0.0")
 
 app.include_router(auth.router)
 app.include_router(menu.router)
