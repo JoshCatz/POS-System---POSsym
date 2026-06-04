@@ -1,7 +1,15 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import EmployeeApp from './portals/employee/EmployeeApp'
+import RestaurantApp from './portals/restaurant/RestaurantApp'
+
 export default function App() {
   return (
-    <div>
-      <h1>POSsym</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/employee/*" element={<EmployeeApp />} />
+        <Route path="/restaurant/*" element={<RestaurantApp />} />
+        <Route path="/" element={<Navigate to="/restaurant/login" />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
