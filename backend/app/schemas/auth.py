@@ -1,12 +1,12 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class POSLoginRequest(BaseModel):
-    employee_id: int
-    pin: str
+    restaurant_id: int
+    pin: str = Field(min_length=4, max_length=12)
 
 class PortalLoginRequest(BaseModel):
-    employee_id: int
-    password: str
+    username: str = Field(min_length=4, max_length=48)
+    password: str = Field(min_length=6, max_length=48)
 
 class LoginResponse(BaseModel):
     access_token: str

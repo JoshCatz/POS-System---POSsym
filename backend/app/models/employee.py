@@ -1,35 +1,51 @@
-from app.models.base import Base
-from sqlalchemy import ForeignKey, String
+from app.models.base import Base, TimestampMixin
+from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 from typing import Optional
 
+# Each individual employee within a restaurant
 class Employee(Base, TimestampMixin):
     __tablename__ = "employees"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id"))
+    
     name: Mapped[str] = mapped_column(String(255))
-    pin_hash: Mapped[str] = mapped_column(String(255))  
+
+    username: Mapped[str] = mapped_column(String(255))
     password_hash: Mapped[str] = mapped_column(String(255))
+
+    pin_hash: Mapped[str] = mapped_column(String(255))  
+    pin_lookup_hash: Mapped[str] = mapped_column(String(255))
+    
     is_active: Mapped[bool] = mapped_column(default=True)
 
-class Position(Base):
+    UniqueConstraint("restaurant_id", "username")
+    UniqueConstraint("restaurant_id", "pin_lookup_hash")
+
+# Employe's job within the restaurant. i.e. Server, Bartender, Manager, Cook, etc.
+class Position(Base, TimestampMixin):
     __tablename__ = "positions"
     
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
     restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id"))
 
-class EmployeePosition(Base):
+# Connects employees to their position
+class EmployeePosition(Base, TimestampMixin):
     __tablename__ = "employee_positions"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     employee_id: Mapped[int] = mapped_column(ForeignKey("employees.id"))
     position_id: Mapped[int] = mapped_column(ForeignKey("positions.id"))
-    UniqueConstraint("employee_id", "position_id")
+    
+    __table_args__ = (
+        UniqueConstraint("employee_id", "position_id"),
+    )
 
-class Shift(Base):
+# Shift worked by an employee
+class Shift(Base, TimestampMixin):
     __tablename__ = "shifts"
 
     id: Mapped[int] = mapped_column(primary_key=True)
