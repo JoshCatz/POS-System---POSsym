@@ -12,10 +12,17 @@ class Employee(Base, TimestampMixin):
     restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id"))
     
     name: Mapped[str] = mapped_column(String(255))
-    pin_hash: Mapped[str] = mapped_column(String(255))  
+
+    username: Mapped[str] = mapped_column(String(255))
     password_hash: Mapped[str] = mapped_column(String(255))
+
+    pin_hash: Mapped[str] = mapped_column(String(255))  
+    pin_lookup_hash: Mapped[str] = mapped_column(String(255))
     
     is_active: Mapped[bool] = mapped_column(default=True)
+
+    UniqueConstraint("restaurant_id", "username")
+    UniqueConstraint("restaurant_id", "pin_lookup_hash")
 
 # Employe's job within the restaurant. i.e. Server, Bartender, Manager, Cook, etc.
 class Position(Base, TimestampMixin):
