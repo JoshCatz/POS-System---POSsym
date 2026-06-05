@@ -12,15 +12,19 @@ api.interceptors.request.use(config => {
     return config
 });
 
+
 api.interceptors.response.use(
-    response => response,
-    error => {
-        if (error.response?.status === 401) {
-            localStorage.removeItem('token')
-            window.location.href = '/restaurant/login'
-        }
-        return Promise.reject(error)
+  (response) => response,
+  (error) => {
+    const isLoginRequest = error.config?.url?.includes('/auth/login');
+
+    if (error.response?.status === 401 && !isLoginRequest) {
+      localStorage.removeItem('token');
+      window.location.href = '/portal/restaurant/login';
     }
+
+    return Promise.reject(error);
+  }
 );
 
 export default api;

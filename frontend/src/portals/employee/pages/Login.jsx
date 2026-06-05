@@ -1,38 +1,45 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import api from '../../../services/api'
 import useEmployeeAuth from '../../../stores/authStore'
 
 export default function Login() {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState(null)
-    const [loading, setLoading] = useState(false)
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-    const { login } = useEmployeeAuth()
-    const navigate = useNavigate()
+    const { login } = useEmployeeAuth();
+    const { token } = useEmployeeAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (token) {
+            navigate('/employee/dashboard/')
+        }
+    }, [token, navigate])
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        setLoading(true)
-        setError(null)
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
 
         try {
             const response = await api.post('/auth/login/portal', {
-                email: email,
+                username: username,
                 password: password
-            })
+            });
 
-            const { access_token, role } = response.data
-            login(access_token, { email, role })
-            navigate('/employee/dashboard')
+            const { access_token, role } = response.data;
+            login(access_token, { username, role });
+            navigate('/employee/dashboard');
 
         } catch (err) {
-            setError(err.response?.data?.message || 'Invalid credentials')
+            setError(err.response?.data?.message || 'Invalid credentials');
         } finally {
-            setLoading(false)
-        }
-    }
+            setLoading(false);
+        };
+    };
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -43,14 +50,14 @@ export default function Login() {
                 )}
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex items-center justify-between gap-4">
-                        <label htmlFor="email">Email: </label>
+                        <label htmlFor="username">Username: </label>
                         <input
-                            type="email"
-                            id="email"
+                            type="text"
+                            id="username"
                             className="border-0 border-b-2"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter your email"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            placeholder="Enter your username"
                         />
                     </div>
                     <div className="flex items-center justify-between gap-4">
@@ -74,5 +81,5 @@ export default function Login() {
                 </form>
             </div>
         </div>
-    )
-}
+    );
+};
