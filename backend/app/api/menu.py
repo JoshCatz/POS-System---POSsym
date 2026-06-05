@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.db import get_db
+from app.database import get_db
 from app.schemas.menu import MenuItemResponse, CreateMenuRequest, UpdateMenuRequest
 from app.services.menu import (
     get_all_menu_items,

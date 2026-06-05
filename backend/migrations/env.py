@@ -1,4 +1,5 @@
 from logging.config import fileConfig
+from app.config import settings
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
@@ -11,6 +12,9 @@ import app.models
 target_metadata = Base.metadata
 
 config = context.config
+
+sync_database_url = settings.DATABASE_URL.replace("+asyncpg", "")
+config.set_main_option("sqlalchemy.url", sync_database_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)

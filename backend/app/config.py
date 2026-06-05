@@ -15,4 +15,4 @@ class Settings(BaseSettings):
 
     pin_lookup_secret_key: str
 
-    settings = Settings()
+settings = Settings()

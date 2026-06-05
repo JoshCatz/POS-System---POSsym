@@ -11,10 +11,10 @@ class PortalLoginRequest(BaseModel):
 class LoginResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
-    role: str
+    # role: str
 
 class TokenData(BaseModel):
     employee_id: int
-    role: str
+    # role: str
     restaurant_id: int
     auth_type: str

@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.errors import UnauthorizedException
 from app.models.employee import Employee
 from app.services.auth import create_pin_lookup_hash, hash_secret
+from app.schemas.employee import EmployeeCreateRequest
 
 
 async def set_employee_pin(db: AsyncSession, employee: Employee, raw_pin: str,) -> Employee:
@@ -48,12 +49,29 @@ def validate_password_strength(raw_password: str, username: str | None = None) -
         raise ValueError("Password must contain at least one letter and one number.")
 
 
-def set_employee_password(
-    employee: Employee,
-    raw_password: str,
-) -> Employee:
+def set_employee_password(employee: Employee, raw_password: str) -> Employee:
     validate_password_strength(raw_password, employee.username)
 
     employee.password_hash = hash_secret(raw_password)
+
+    return employee
+
+async def create_employee(db: AsyncSession, data: EmployeeCreateRequest) -> Employee:
+    employee = Employee(
+        restaurant_id=data.restaurant_id,
+        name=data.name,
+        username=data.username,
+        is_active=True,
+    )
+
+    if data.pin:
+        await set_employee_pin(db, employee, data.pin)
+
+    if data.password:
+        set_employee_password(employee, data.password)
+
+    db.add(employee)
+    await db.commit()
+    await db.refresh(employee)
 
     return employee
