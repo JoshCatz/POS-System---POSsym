@@ -72,7 +72,8 @@ async def portal_login(request: PortalLoginRequest, db: AsyncSession = Depends(g
     token = create_token(
         employee_id=employee.id,
         restaurant_id=employee.restaurant_id,
-        auth_type="portal"
+        auth_type="portal",
+        name=employee.name
     )
 
     return LoginResponse(access_token=token, token_type="bearer")

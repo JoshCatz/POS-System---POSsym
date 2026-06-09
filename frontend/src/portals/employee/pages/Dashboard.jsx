@@ -16,7 +16,7 @@ export default function Dashboard() {
             <div className="bg-white p-8 rounded-lg shadow-md">
                 <h1 className="text-2xl font-bold mb-4">Employee Dashboard</h1>
                 <p className="text-gray-600 mb-6">
-                    Logged in as: {employee?.email}
+                    Logged in as: {employee?.username}
                 </p>
                 <button
                     onClick={handleLogout}
