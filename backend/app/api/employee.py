@@ -14,5 +14,5 @@ async def get_one_employee(restaurant_id:int, employee_id:int, db: AsyncSession 
     return await get_employee(db, restaurant_id, employee_id)
 
 @router.post("", response_model=EmployeeResponse)
-async def create_employee_route(request: EmployeeCreateRequest,db: AsyncSession = Depends(get_db)):
+async def create_employee_route(request: EmployeeCreateRequest, db: AsyncSession = Depends(get_db)):
     return await create_employee(db, request)
