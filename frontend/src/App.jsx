@@ -8,7 +8,7 @@ export default function App() {
       <Routes>
         <Route path="/employee/*" element={<EmployeeApp />} />
         <Route path="/restaurant/*" element={<RestaurantApp />} />
-        <Route path="/" element={<Navigate to="/restaurant/login" />} />
+        <Route path="/" element={<Navigate to="/employee/login" />} />
       </Routes>
     </BrowserRouter>
   )
