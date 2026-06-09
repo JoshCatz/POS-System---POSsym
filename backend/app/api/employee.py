@@ -9,7 +9,7 @@ from app.services.employee import set_employee_password, set_employee_pin, creat
 
 router = APIRouter(prefix="/employees", tags=["employees"])
 
-@router.get("")
+@router.get("", response_model=EmployeeResponse)
 async def get_one_employee(restaurant_id:int, employee_id:int, db: AsyncSession = Depends(get_db)):
     return await get_employee(db, restaurant_id, employee_id)
 
