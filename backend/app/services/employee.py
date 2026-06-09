@@ -5,6 +5,7 @@ from app.errors import UnauthorizedException
 from app.models.employee import Employee
 from app.services.auth import create_pin_lookup_hash, hash_secret
 from app.schemas.employee import EmployeeCreateRequest
+from app.errors import NotFoundException
 
 
 async def set_employee_pin(db: AsyncSession, employee: Employee, raw_pin: str,) -> Employee:
@@ -75,3 +76,12 @@ async def create_employee(db: AsyncSession, data: EmployeeCreateRequest) -> Empl
     await db.refresh(employee)
 
     return employee
+
+async def get_employee(db: AsyncSession, employee_id: int, restaurant_id: int):
+    result = await db.execute(select(Employee).where(Employee.id == employee_id, Employee.restaurant_id == restaurant_id))
+    item = result.scalar_one_or_none()
+
+    if not item:
+        raise NotFoundException(f"Employee not found: {employee_id}")
+
+    return item
