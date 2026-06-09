@@ -1,16 +1,16 @@
 from sqlalchemy import select
 from app.schemas.menu import CreateMenuRequest, UpdateMenuRequest
-from app.models.menu import Menu
+from app.models.menu import MenuItem
 from app.errors import NotFoundException, RedundantException
 
 async def get_all_menu_items(db, restaurant_id):
-    result = await db.execute(select(Menu).where(Menu.restaurant_id == restaurant_id))
+    result = await db.execute(select(MenuItem).where(MenuItem.restaurant_id == restaurant_id))
     items = result.scalars().all()
 
     return items
 
 async def get_menu_item(db, item_id):
-    result = await db.execute(select(Menu).where(Menu.id == item_id))
+    result = await db.execute(select(MenuItem).where(MenuItem.id == item_id))
     item = result.scalar_one_or_none()
 
     if not item:
@@ -19,7 +19,7 @@ async def get_menu_item(db, item_id):
     return item
 
 async def create_menu_item(db, data: CreateMenuRequest):
-    item = Menu(**data.model_dump())
+    item = MenuItem(**data.model_dump())
     db.add(item)
     await db.commit()
     await db.refresh(item)
@@ -27,7 +27,7 @@ async def create_menu_item(db, data: CreateMenuRequest):
     return item
 
 async def update_menu_item(db, item_id, data: UpdateMenuRequest):
-    result = await db.execute(select(Menu).where(Menu.id == item_id))
+    result = await db.execute(select(MenuItem).where(MenuItem.id == item_id))
     item = result.scalar_one_or_none()
 
     if not item:
@@ -41,31 +41,31 @@ async def update_menu_item(db, item_id, data: UpdateMenuRequest):
     return item
 
 async def eighty_six_item(db, item_id):
-    result = await db.execute(select(Menu).where(Menu.id == item_id))
+    result = await db.execute(select(MenuItem).where(MenuItem.id == item_id))
     item = result.scalar_one_or_none()
 
     if not item:
         raise NotFoundException(f"Menu item {item_id}")
     
-    if item.active == False:
+    if item.is_active == False:
         raise RedundantException(f"Item already 86.")
 
-    item.active = False
+    item.is_active = False
     await db.commit()
     await db.refresh(item)
     return item
     
 async def restore_item(db, item_id):
-    result = await db.execute(select(Menu).where(Menu.id == item_id))
+    result = await db.execute(select(MenuItem).where(MenuItem.id == item_id))
     item = result.scalar_one_or_none()
 
     if not item:
         raise NotFoundException(f"Menu item {item_id}")
     
-    if item.active == True:
+    if item.is_active == True:
         raise RedundantException(f"Item already restored.")
 
-    item.active = True
+    item.is_active = True
     await db.commit()
     await db.refresh(item)
     return item

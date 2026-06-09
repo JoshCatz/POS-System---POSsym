@@ -7,6 +7,7 @@ sqlalchemy==2.0.36        # ORM - maps Python classes to PostgreSQL tables
 alembic==1.13.0           # Migration tool - versions and applies schema changes
 asyncpg==0.30.0           # Async PostgreSQL driver - lets FastAPI talk to Postgres
                           # without blocking (required for SQLAlchemy async mode)
+psycopg2-binary==2.9.10
 
 # ── Redis ──────────────────────────────────────────────────
 redis==5.1.0              # Redis client - used for table locking, pub/sub,
@@ -48,3 +49,4 @@ pytest-asyncio==0.24.0    # Lets pytest run async test functions
 # ── Dev Utilities ──────────────────────────────────────────
 python-dotenv==1.0.0      # Loads .env file into environment variables
                           # during local development
+
