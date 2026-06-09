@@ -3,7 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.errors import POSException, TableLockedException
-from app.api import auth, menu, employee
+from app.api import auth, menu, employee, restaurant
 
 
 app = FastAPI(title="POS System API", version="1.0.0")
@@ -22,6 +22,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(menu.router)
 app.include_router(employee.router)
+app.include_router(restaurant.router)
 
 @app.exception_handler(POSException)
 async def pos_exception_handler(request: Request, exc: POSException):
