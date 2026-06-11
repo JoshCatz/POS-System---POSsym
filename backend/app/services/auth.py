@@ -17,11 +17,12 @@ def hash_secret(secret: str) -> str:
 def verify_secret(plain_secret: str, hashed_secret: str) -> bool:
     return pwd_context.verify(plain_secret, hashed_secret)
 
-def create_token(employee_id: int, restaurant_id: int, auth_type: str) -> str:
+def create_token(employee_id: int, restaurant_id: int, auth_type: str, name:str) -> str:
     payload = {
         "employee_id": employee_id,
         "restaurant_id": restaurant_id,
         "auth_type": auth_type,
+        "name": name,
         "exp": datetime.now() + timedelta(minutes=settings.jwt_expire_minutes)
     }
     return jwt.encode(payload, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
