@@ -5,9 +5,9 @@ uvicorn==0.30.0           # ASGI server that runs FastAPI (like Apache/Nginx for
 # ── Database ───────────────────────────────────────────────
 sqlalchemy==2.0.36        # ORM - maps Python classes to PostgreSQL tables
 alembic==1.13.0           # Migration tool - versions and applies schema changes
-asyncpg==0.30.0           # Async PostgreSQL driver - lets FastAPI talk to Postgres
+asyncpg==0.31.0           # Async PostgreSQL driver - lets FastAPI talk to Postgres
                           # without blocking (required for SQLAlchemy async mode)
-psycopg2-binary==2.9.10
+psycopg2-binary==2.9.12
 
 # ── Redis ──────────────────────────────────────────────────
 redis==5.1.0              # Redis client - used for table locking, pub/sub,
@@ -28,7 +28,7 @@ boto3==1.35.0             # AWS SDK - used by Celery tasks to sync data
                           # to S3, RDS, and other AWS services
 
 # ── Validation & Serialization ─────────────────────────────
-pydantic==2.9.0           # Data validation - defines request/response shapes,
+pydantic==2.13.4           # Data validation - defines request/response shapes,
                           # built into FastAPI
 pydantic-settings==2.5.0  # Loads and validates .env variables into a
                           # typed Python settings object
