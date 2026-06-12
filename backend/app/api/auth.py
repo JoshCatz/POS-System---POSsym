@@ -9,8 +9,10 @@ from app.schemas.auth import POSLoginRequest, PortalLoginRequest, LoginResponse
 from app.services.auth import verify_secret, create_token, create_pin_lookup_hash
 from app.errors import UnauthorizedException
 
+# Create route for /auth which will be used for all logins
 router = APIRouter(prefix="/auth", tags=["auth"])
 
+# Method for users to login to the POS system
 @router.post("/login/pos", response_model=LoginResponse)
 async def pos_login(request: POSLoginRequest, db: AsyncSession = Depends(get_db)):
 
@@ -46,7 +48,7 @@ async def pos_login(request: POSLoginRequest, db: AsyncSession = Depends(get_db)
 
     return LoginResponse(access_token=token, token_type="bearer")
 
-
+# Method for users to login to the portal dashboard
 @router.post("/login/portal", response_model=LoginResponse)
 async def portal_login(request: PortalLoginRequest, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Employee).where(Employee.username == request.username))
