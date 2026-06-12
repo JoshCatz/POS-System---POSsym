@@ -8,6 +8,7 @@ from app.models.restaurant import Restaurant
 from app.schemas.auth import POSLoginRequest, PortalLoginRequest, LoginResponse
 from app.services.auth import verify_secret, create_token, create_pin_lookup_hash
 from app.errors import UnauthorizedException
+from app.config import settings
 
 # Create route for /auth which will be used for all logins
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -17,10 +18,10 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 async def pos_login(request: POSLoginRequest, db: AsyncSession = Depends(get_db)):
 
     # 1. Generate lookup hash
-    pin_lookup_hash = create_pin_lookup_hash(restaurant_id = request.restaurant_id, pin=request.pin)
+    pin_lookup_hash = create_pin_lookup_hash(restaurant_id = settings.RESTAURANT_ID, pin=request.pin)
 
     # 2. Find employee by lookup hash
-    result = await db.execute(select(Employee).where(Employee.restaurant_id == request.restaurant_id, Employee.pin_lookup_hash == pin_lookup_hash, Employee.is_active == True))
+    result = await db.execute(select(Employee).where(Employee.restaurant_id == settings.RESTAURANT_ID, Employee.pin_lookup_hash == pin_lookup_hash, Employee.is_active == True))
     employee = result.scalar_one_or_none()
 
     # 3. Employee not found
@@ -43,7 +44,8 @@ async def pos_login(request: POSLoginRequest, db: AsyncSession = Depends(get_db)
     token = create_token(
         employee_id=employee.id,
         restaurant_id=employee.restaurant_id,
-        auth_type="pos"
+        auth_type="pos",
+        name=employee.name
     )
 
     return LoginResponse(access_token=token, token_type="bearer")

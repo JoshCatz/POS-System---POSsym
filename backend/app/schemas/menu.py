@@ -18,7 +18,6 @@ class CreateMenuRequest(BaseModel):
     price: float
     description: Optional[str] = None
     category_id: int
-    restaurant_id: int
 
 # Defines structure of data that should be sent to api for updating existing menu item(s)
 class UpdateMenuRequest(BaseModel):
