@@ -102,7 +102,7 @@ PostgreSQL stores data such as:
 * Reports and analytics records
 * Audit logs
 
-PostgreSQL is esepcially significant because all business data must be durable and consistent. For example, once a payment is completed, the system needs a reliable record of what was paid, when it was paid, who processed it, and which order/check it belonged to.
+PostgreSQL is especially significant because all business data must be durable and consistent. For example, once a payment is completed, the system needs a reliable record of what was paid, when it was paid, who processed it, and which order/check it belonged to.
 
 ---
 
