@@ -20,7 +20,7 @@ class MenuItem(Base, TimestampMixin):
 
   id: Mapped[int] = mapped_column(primary_key=True)
   restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id"), nullable=False)
-  cateogry_id: Mapped[int | None] = mapped_column(ForeignKey("menu_categories.id"), nullable=False)
+  category_id: Mapped[int | None] = mapped_column(ForeignKey("menu_categories.id"), nullable=False)
 
   name: Mapped[str] = mapped_column(String(255), nullable=False)
   description: Mapped[str | None] = mapped_column(String(500), nullable=True)

@@ -2,6 +2,7 @@ from sqlalchemy import select
 from app.schemas.menu import CreateMenuRequest, UpdateMenuRequest
 from app.models.menu import MenuItem
 from app.errors import NotFoundException, RedundantException
+from app.config import settings
 
 # Function to retrieve all menu items
 async def get_all_menu_items(db, restaurant_id):
@@ -21,7 +22,7 @@ async def get_menu_item(db, item_id, restaurant_id):
     return item 
 
 async def create_menu_item(db, data: CreateMenuRequest):
-    item = MenuItem(**data.model_dump()) # creates an item modeling the schema created in CreateMenuRequest
+    item = MenuItem(**data.model_dump(), restaurant_id=settings.RESTAURANT_ID) # creates an item modeling the schema created in CreateMenuRequest
     db.add(item) # adds the item to the database
     await db.commit() # commits the change
     await db.refresh(item) # reloads item from db so generated fields are populated
