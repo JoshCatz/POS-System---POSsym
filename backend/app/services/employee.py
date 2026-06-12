@@ -7,7 +7,7 @@ from app.services.auth import create_pin_lookup_hash, hash_secret
 from app.schemas.employee import EmployeeCreateRequest
 from app.errors import NotFoundException
 
-
+# Checks to see if a requested PIN is already in use at a location
 async def set_employee_pin(db: AsyncSession, employee: Employee, raw_pin: str,) -> Employee:
     pin_lookup_hash = create_pin_lookup_hash(
         restaurant_id=employee.restaurant_id,
@@ -32,7 +32,7 @@ async def set_employee_pin(db: AsyncSession, employee: Employee, raw_pin: str,) 
 
     return employee
 
-
+# Checks at account creation if a password meets the strength requirements
 def validate_password_strength(raw_password: str, username: str | None = None) -> None:
     if len(raw_password) < 8:
         raise ValueError("Password must be at least 8 characters long.")
@@ -49,7 +49,7 @@ def validate_password_strength(raw_password: str, username: str | None = None) -
     if not has_letter or not has_number:
         raise ValueError("Password must contain at least one letter and one number.")
 
-
+# Sets an employee's password to the validated requested password
 def set_employee_password(employee: Employee, raw_password: str) -> Employee:
     validate_password_strength(raw_password, employee.username)
 
@@ -57,6 +57,7 @@ def set_employee_password(employee: Employee, raw_password: str) -> Employee:
 
     return employee
 
+# Parent function to create an employee object and store it in the Postgres database
 async def create_employee(db: AsyncSession, data: EmployeeCreateRequest) -> Employee:
     employee = Employee(
         restaurant_id=data.restaurant_id,
@@ -77,6 +78,7 @@ async def create_employee(db: AsyncSession, data: EmployeeCreateRequest) -> Empl
 
     return employee
 
+# Function to retrieve employee object from database
 async def get_employee(db: AsyncSession, employee_id: int, restaurant_id: int):
     result = await db.execute(select(Employee).where(Employee.id == employee_id, Employee.restaurant_id == restaurant_id))
     item = result.scalar_one_or_none()
