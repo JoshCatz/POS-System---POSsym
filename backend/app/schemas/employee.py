@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 
-
+# Defines structure for POST /employees requests
 class EmployeeCreateRequest(BaseModel):
     restaurant_id: int
     name: str = Field(min_length=1, max_length=255)
@@ -8,7 +8,7 @@ class EmployeeCreateRequest(BaseModel):
     pin: str | None = Field(default=None, min_length=4, max_length=12)
     password: str | None = Field(default=None, min_length=8, max_length=128)
 
-
+# Defines structure for the system to respond to GET /employees requests
 class EmployeeResponse(BaseModel):
     id: int
     restaurant_id: int

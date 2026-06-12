@@ -1,7 +1,8 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class RestaurantResponse(BaseModel):
+# Defines structure for sending POST /restaurants requests
+class CreateRestaurantRequest(BaseModel):
     id: int
     name: str
     company: str
@@ -10,7 +11,8 @@ class RestaurantResponse(BaseModel):
     state: str
     country: str
 
-class CreateRestaurantRequest(BaseModel):
+# Defines structure for system to respond to GET /restaurants requests
+class RestaurantResponse(BaseModel):
     id: int
     name: str
     company: str
