@@ -4,6 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 from decimal import Decimal
 
+# Table to store records for all processed payments
 class Payment(Base, TimestampMixin):
     __tablename__ = "payments"
 
@@ -22,6 +23,7 @@ class Payment(Base, TimestampMixin):
 
     paid_at: Mapped[datetime | None] = mapped_column(nullable=True)
 
+# Table to store records for all processed refunds
 class Refund(Base):
     __tablename__ = "refunds"
 
