@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     # Database connection string used by SQLAlchemy to connect to PostgreSQL.
     DATABASE_URL: str
 
+    # Hard Coded restaurant id per restaurant
+    RESTAURANT_ID: int
+
     # Tells Pydantic where to load local environment variables from.
     # In development, this lets us keep secrets/config values in a local .env file.
     model_config = SettingsConfigDict(

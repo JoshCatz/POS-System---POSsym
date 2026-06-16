@@ -4,6 +4,8 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 import hashlib
 import hmac
+from fastapi import Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from app.config import settings
 from app.schemas.auth import TokenData
@@ -22,6 +24,12 @@ from app.errors import UnauthorizedException
 # deprecated="auto" allows Passlib to manage deprecated hashing schemes
 # automatically if we ever add or migrate hashing algorithms in the future.
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# Extracts the bearer token from the Authorization header of incoming requests.
+# Used as a dependency (Depends(bearer_scheme)) on protected routes - FastAPI
+# automatically returns a 401 if the header is missing or malformed.
+# Also powers Swagger's "Authorize" button, showing a single field to paste a token.
+bearer_scheme = HTTPBearer()
 
 # Hashes a plain-text secret, such as a password or PIN, before storing it. 
 # The original plain-text value should never be saved directly.
@@ -73,3 +81,10 @@ def decode_token(token: str) -> TokenData:
 
     except JWTError:
         raise UnauthorizedException()
+    
+# FastAPI dependency used on protected routes via Depends(get_current_user).
+# Pulls the bearer token out of the request header (via bearer_scheme),
+# then decodes it into a TokenData object containing employee_id, restaurant_id,
+# and auth_type. Raises UnauthorizedException if the token is missing or invalid.
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)) -> TokenData:
+    return decode_token(credentials.credentials)
