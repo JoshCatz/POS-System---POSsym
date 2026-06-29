@@ -13,6 +13,7 @@ class PortalLoginRequest(BaseModel):
 class LoginResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+    name: str
     # role: str
 
 # Defines structure for token information to be transmitted

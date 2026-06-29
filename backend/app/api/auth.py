@@ -48,7 +48,7 @@ async def pos_login(request: POSLoginRequest, db: AsyncSession = Depends(get_db)
         name=employee.name
     )
 
-    return LoginResponse(access_token=token, token_type="bearer")
+    return LoginResponse(access_token=token, token_type="bearer", name=employee.name)
 
 # Method for users to login to the portal dashboard
 @router.post("/login/portal", response_model=LoginResponse)
