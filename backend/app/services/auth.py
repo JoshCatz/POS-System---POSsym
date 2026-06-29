@@ -9,7 +9,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from app.config import settings
 from app.schemas.auth import TokenData
-from app.errors import UnauthorizedException
+from app.errors import UnauthorizedException, ForbiddenException
 
 # Creates a password hashing context for the application.
 #
@@ -43,12 +43,13 @@ def verify_secret(plain_secret: str, hashed_secret: str) -> bool:
 
 # Creates a signed JWT containing the employee's login/session information
 # The token includes an expiration time so the session does not last forever.
-def create_token(employee_id: int, restaurant_id: int, auth_type: str, name:str) -> str:
+def create_token(employee_id: int, restaurant_id: int, auth_type: str, name:str, role:str) -> str:
     payload = {
         "employee_id": employee_id,
         "restaurant_id": restaurant_id,
         "auth_type": auth_type,
         "name": name,
+        "role": role,
         "exp": datetime.now() + timedelta(minutes=settings.jwt_expire_minutes)
     }
     return jwt.encode(payload, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
@@ -69,6 +70,7 @@ def decode_token(token: str) -> TokenData:
         employee_id = payload.get("employee_id")
         restaurant_id = payload.get("restaurant_id")
         auth_type = payload.get("auth_type")
+        role=payload.get("role")
 
         if employee_id is None or restaurant_id is None or auth_type is None:
             raise UnauthorizedException()
@@ -77,6 +79,7 @@ def decode_token(token: str) -> TokenData:
             employee_id=employee_id,
             restaurant_id=restaurant_id,
             auth_type=auth_type,
+            role=role,
         )
 
     except JWTError:
@@ -88,3 +91,10 @@ def decode_token(token: str) -> TokenData:
 # and auth_type. Raises UnauthorizedException if the token is missing or invalid.
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)) -> TokenData:
     return decode_token(credentials.credentials)
+
+def require_role(*roles: str):
+    async def check(current_user: TokenData = Depends(get_current_user)) -> TokenData:
+        if current_user.role not in roles:
+            raise ForbiddenException(current_user.role)
+        return current_user
+    return check

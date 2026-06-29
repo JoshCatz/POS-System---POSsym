@@ -7,6 +7,8 @@ from app.models.employee import Employee
 from app.models.restaurant import Restaurant
 from app.schemas.auth import POSLoginRequest, PortalLoginRequest, LoginResponse
 from app.services.auth import verify_secret, create_token, create_pin_lookup_hash
+from app.models.rbac import EmployeeRole, Role
+from app.services.rbac import get_highest_role
 from app.errors import UnauthorizedException
 from app.config import settings
 
@@ -23,6 +25,17 @@ async def pos_login(request: POSLoginRequest, db: AsyncSession = Depends(get_db)
     # 2. Find employee by lookup hash
     result = await db.execute(select(Employee).where(Employee.restaurant_id == settings.RESTAURANT_ID, Employee.pin_lookup_hash == pin_lookup_hash, Employee.is_active == True))
     employee = result.scalar_one_or_none()
+
+
+
+    # After finding the employee, fetch their role
+    role_result = await db.execute(
+        select(Role.name)
+        .join(EmployeeRole, EmployeeRole.role_id == Role.id)
+        .where(EmployeeRole.employee_id == employee.id)
+    )
+
+    role = role_result.scalar_one_or_none() or "employee"  # default to employee if none assigned
 
     # 3. Employee not found
     if not employee or not employee.is_active:
@@ -45,10 +58,11 @@ async def pos_login(request: POSLoginRequest, db: AsyncSession = Depends(get_db)
         employee_id=employee.id,
         restaurant_id=employee.restaurant_id,
         auth_type="pos",
-        name=employee.name
+        name=employee.name,
+        role=role
     )
 
-    return LoginResponse(access_token=token, token_type="bearer", name=employee.name)
+    return LoginResponse(access_token=token, token_type="bearer", name=employee.name, role=role)
 
 # Method for users to login to the portal dashboard
 @router.post("/login/portal", response_model=LoginResponse)
@@ -71,13 +85,17 @@ async def portal_login(request: PortalLoginRequest, db: AsyncSession = Depends(g
         raise UnauthorizedException()
         # Figure out how to print on front-end message "Incorrect password!"
 
+    # After finding the employee, fetch their role
+    highest_role = await get_highest_role(db, employee.id, employee.restaurant_id)
+
     
     # 4. Create token
     token = create_token(
         employee_id=employee.id,
         restaurant_id=employee.restaurant_id,
         auth_type="portal",
-        name=employee.name
+        name=employee.name,
+        role=highest_role
     )
 
-    return LoginResponse(access_token=token, token_type="bearer")
+    return LoginResponse(access_token=token, token_type="bearer", name=employee.name, role=highest_role)

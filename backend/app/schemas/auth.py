@@ -14,11 +14,11 @@ class LoginResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     name: str
-    # role: str
+    role: str
 
 # Defines structure for token information to be transmitted
 class TokenData(BaseModel):
     employee_id: int
-    # role: str
+    role: str
     restaurant_id: int
     auth_type: str

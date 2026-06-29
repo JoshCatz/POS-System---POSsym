@@ -6,6 +6,7 @@ from app.models.employee import Employee
 from app.services.auth import create_pin_lookup_hash, hash_secret
 from app.schemas.employee import EmployeeCreateRequest
 from app.errors import NotFoundException
+from app.config import settings
 
 # Checks to see if a requested PIN is already in use at a location
 async def set_employee_pin(db: AsyncSession, employee: Employee, raw_pin: str,) -> Employee:
@@ -87,3 +88,9 @@ async def get_employee(db: AsyncSession, employee_id: int, restaurant_id: int):
         raise NotFoundException(f"Employee not found: {employee_id}")
 
     return item
+
+async def get_all_employees(db: AsyncSession, restaurant_id):
+    result = await db.execute(select(Employee).where(Employee.restaurant_id == restaurant_id))
+    employees = result.scalars().all()
+
+    return employees
